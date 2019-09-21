@@ -11,7 +11,7 @@ namespace Hazel
 		None = 0,
 		WindowClose, WindowResize, WindowFocus, WindowLastFocus, WindowMoved,
 		AppTick, AppUpdate, AppRender,
-		KeyPressed, KeyReleased,
+		KeyPressed, KeyReleased, KeyTyped,
 		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
 	};
 
@@ -47,6 +47,8 @@ namespace Hazel
 			return GetCategoryFlags() & category;
 		}
 
+		bool GetHandle() { return m_Handled;  }
+		void SetHandle(bool Handle) { m_Handled = Handle; }
 	protected :
 		bool m_Handled = false;
 	};
@@ -67,7 +69,7 @@ namespace Hazel
 		{
 			if (m_Event.GetEventType() == T::GetStaticType())
 			{
-				m_Event.m_Handled = func(*(T*)&m_Event);
+				m_Event.m_Handled = func(static_cast<T&>(m_Event));
 				return true;
 			}
 
@@ -82,4 +84,5 @@ namespace Hazel
 	{
 		return os << e.ToString();
 	}
+
 }
